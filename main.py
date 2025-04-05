@@ -3,10 +3,21 @@ from bs4 import BeautifulSoup
 import re
 import sys
 import os
+import customtkinter as ctk
 
-CMD_EXEC = False
+#dictionary for char replacement
+replace = {
+    "\\n":"",
+    "\\r":"\n",
+    "[ch]":"",
+    "[/ch]":"",
+    "[tab]":"",
+    "[/tab]":"",
+    "\\&quot;":"",
+    "'":"'"
+}
 
-#usage help
+
 
 #---------------
 #    FUNCT
@@ -47,59 +58,90 @@ def link2title(link):
     }
     return link_content
 
-#dictionary for char replacement
-replace = {
-    "\\n":"",
-    "\\r":"\n",
-    "[ch]":"",
-    "[/ch]":"",
-    "[tab]":"",
-    "[/tab]":"",
-    "\\&quot;":"",
-    "'":"'"
-}
+def log_append(new_text):
+    current = label_text.get()
+    updated = current + "\n" + new_text
+    label_text.set(updated)
+
+def extract (url):
+    
+    
+
+    #HTML fetch 
+    response = requests.get(url)
+
+    if response.status_code != 200:
+        print(response.status_code)
+        log_append("Page fetch error:" + response.status_code)
+        exit()
+
+    log_append("Page fetch status 200 (successfull)")
+
+    #making file title based on link
+    name = regex(link2title(url)["title"], "^", "-[0-9]")
+
+
+    soup = BeautifulSoup(response.text, 'html.parser')
+
+    #writing raw html data (for debug purpose)
+    #with open('rawPage_content.html', 'w', encoding='utf-8') as file:
+    #    file.write(str(soup))
+
+    #selecting js-store class
+    selected_div = soup.find('div', {'class': 'js-store'})
+
+    #searching for text
+    section = regex(str(selected_div.prettify()), "\\\\r", "&quot;,")
+
+    #cleaning messy text from special chars
+    cleanText = rem(section, replace)
+
+    log_append("Removing useless stuff...")
+
+    #writing text body in the file
+    filename = f"./songs/{name}.txt"
+    os.makedirs(os.path.dirname(filename), exist_ok=True)
+    with open(filename, 'w', encoding='utf-8') as file:
+        file.write(str(cleanText))
+
+    log_append("Done!")
+    log_append("File name: "+ name)
+    log_append("you can find it in: " + filename + "\n")
+    log_append("-----------------------------")
+
+def execute():
+    extract(entry.get())
 
 
 #---------------
 #    MAIN
 #---------------
-if (CMD_EXEC == False):
-    url = str(input("Write here the UltimateGuitar site link:\n"))
 
-#making file title based on link
-name = regex(link2title(url)["title"], "^", "-[0-9]")
+#making GUI
 
-#HTML fetch 
-response = requests.get(url)
+app = ctk.CTk()
+app.title("UG Extractor")
+app.geometry("600x350")
+app.grid_columnconfigure(0, weight=1)
 
-if response.status_code != 200:
-    print(f"SiteFetch: request error for status code: {response.status_code}")
-    exit()
+label = ctk.CTkLabel(app, text="Welcome! paste here your Ultimate Guitar link!",text_color="orange", fg_color="transparent")
+label.grid(row=0, column=0, padx=20, pady=20, sticky="ew")
 
-soup = BeautifulSoup(response.text, 'html.parser')
-
-#writing raw html data (for debug purpose)
-#with open('rawPage_content.html', 'w', encoding='utf-8') as file:
-#    file.write(str(soup))
-
-#selecting js-store class
-selected_div = soup.find('div', {'class': 'js-store'})
-
-#searching for text
-section = regex(str(selected_div.prettify()), "\\\\r", "&quot;,")
-
-#cleaning messy text from special chars
-cleanText = rem(section, replace)
+entry = ctk.CTkEntry(app, placeholder_text="Paste UG link here (ctrl + v to paste)")
+entry.grid(row=1, column=0, padx=20, pady=20, sticky="ew")
 
 
-#writing text body in the file
-filename = f"./songs/{name}.txt"
-os.makedirs(os.path.dirname(filename), exist_ok=True)
-with open(filename, 'w', encoding='utf-8') as file:
-    file.write(str(cleanText))
+button = ctk.CTkButton(app, text="Start extracting", command=execute)
+button.grid(row=2, column=0, padx=20, pady=20, sticky="ew")
 
-#closing
-print("Done!")
-print("File name: "+ name)
-print("you can find it in: " + filename)
+frame = ctk.CTkFrame(app, width=200, height=100, bg_color="transparent", border_color="black")
+frame.grid(row=3, column=0, padx=20, pady=20, sticky="ew")
+
+label_text = ctk.StringVar(value="")
+label2 = ctk.CTkLabel(master=frame, textvariable=label_text,justify="left", anchor="nw")
+label2.grid(row=0, column=0, padx=0, pady=0, sticky="ew")
+
+
+app.mainloop()
+
 
