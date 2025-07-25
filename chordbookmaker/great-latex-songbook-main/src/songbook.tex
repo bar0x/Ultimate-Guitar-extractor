@@ -1,0 +1,90 @@
+\documentclass{book}
+\usepackage[a4paper,
+  top=2cm,
+  bottom=2.5cm,
+  left=3cm,
+  right=2cm,
+  headheight=17pt, % as per the warning by fancyhdr
+  includehead,includefoot,
+  heightrounded, % to avoid spurious underfull messages
+]{geometry}
+\usepackage{fontspec}
+
+% Use custom fonts
+\setmainfont{Work Sans Regular}
+%\setmonofont{Input Mono}
+
+\usepackage[fontsize=12pt]{fontsize}
+\pagenumbering{gobble} % No page number
+\usepackage{sectsty,fancyhdr}
+
+\pagestyle{fancy}
+\fancyhf{}
+\lhead{The Great LaTeX Songbook} % Songbook name
+\renewcommand{\headrulewidth}{1.0pt}
+\renewcommand{\footrulewidth}{1.0pt}
+\rfoot{\rightmark}
+\lfoot{\leftmark}
+
+\usepackage{leadsheets}
+\ExplSyntaxOn
+\prop_new:N \l__leadsheets_songs_height_prop
+\ExplSyntaxOff
+\AtBeginDocument{
+  \renewcommand{\printchordstringname}[1]{}
+}
+
+
+\usepackage{guitarchordschemes}
+\providecommand{\printchordstringname}[1]{}
+\usepackage{musixtex,graphicx}
+
+\definesongtitletemplate{custom}{
+  \section*{ \songproperty{title} }%
+  \markboth{ \songproperty{title} }{ \songproperty{band} }%
+}
+
+\setleadsheets{
+  title-template = custom,
+  intro/label-format = \scriptsize,
+  verse/label-format= \scriptsize,
+  verse/numbered=true,
+  chords/format = \small\bf\ttfamily,
+  chorus/label-format = \scriptsize,
+  interlude/label-format = \scriptsize,
+  bridge/label-format = \scriptsize
+}
+
+\input{src/instruments-available.tex}
+\input{src/current-instrument.tex}
+\input{src/chords/chords-guitar.tex}
+
+\usepackage{pdfpages}
+
+
+
+
+
+
+
+
+
+% Se esiste, ridefinisci il comando che stampa i nomi delle corde come vuoto
+\providecommand{\printchordstringname}[1]{}
+
+% Se invece il testo è disegnato come nodo tikz, sovrascrivi la definizione
+\usepackage{tikz}
+\tikzset{every string name/.style={draw=none,opacity=0}}
+
+
+
+
+
+
+
+
+
+\begin{document}
+\includepdf[pages=-]{src/cover.pdf}
+\input{src/songs.tex}
+\end{document}

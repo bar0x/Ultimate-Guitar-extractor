@@ -1,0 +1,14 @@
+FILENAME=songbook
+
+INPUT_DIR=src
+INPUT_PATH=$(INPUT_DIR)/$(FILENAME).tex
+
+OUTPUT_DIR=dist
+OUTPUT_PATH=$(OUTPUT_DIR)/$(FILENAME).pdf
+
+LATEX_COMPILATION_CMD=latexmk -xelatex -output-directory=$(OUTPUT_DIR)
+
+
+current: $(INPUT_PATH)
+	$(LATEX_COMPILATION_CMD) $(INPUT_PATH)
+
