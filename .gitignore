@@ -1,3 +1,9 @@
+.venv
 venv
 build
 songs
+
+#compilation chordbook output
+.tex
+.pdf
+__pycache__

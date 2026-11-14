@@ -1,96 +1,21 @@
-import requests
-from bs4 import BeautifulSoup
+import logging
 import re
 import sys
 import os
-import customtkinter as ctk
-
-#dictionary for char replacement
 
 
+def main():
+    logging.basicConfig(
+        level=logging.INFO,
+        # %(name)s stamperà automaticamente il nome del file/modulo che ha generato il log!
+        format="%(asctime)s - [%(name)s] - %(levelname)s - %(message)s",
+        handlers=[
+            logging.StreamHandler(),               # Stampa a video
+            logging.FileHandler("applicazione.log") # Salva su file
+        ]
+    )
 
-
-#---------------
-#    FUNCT
-#---------------
-
-
-def regex(testo, regex_iniziale, regex_finale):
-    # Cerca la parte del testo che si trova tra le due regex
-    pattern = rf'({regex_iniziale})(.*?){regex_finale}'
-    
-    # Esegui la ricerca con la regex combinata
-    match = re.search(pattern, testo)
-    
-    if match:
-        return match.group(2)
-    else:
-        return None
-
-def link2title(link):
-    frame = link.split('/')
-    #print(frame)
-    link_content = {
-        "site": frame[2],  
-        "tab": frame[3],   
-        "singer": frame[4],  
-        "title": frame[5]  
-    }
-    return link_content
-
-def log_append(new_text):
-    current = label_text.get()
-    updated = current + "\n" + new_text
-    label_text.set(updated)
-
-def extract (url):
-    
-    
-
-    #HTML fetch 
-    response = requests.get(url)
-
-    if response.status_code != 200:
-        print(response.status_code)
-        log_append("Page fetch error:" + response.status_code)
-        exit()
-
-    log_append("Page fetch status 200 (successfull)")
-
-    #making file title based on link
-    name = regex(link2title(url)["title"], "^", "-[0-9]")
-
-
-    soup = BeautifulSoup(response.text, 'html.parser')
-
-    #writing raw html data (for debug purpose)
-    #with open('rawPage_content.html', 'w', encoding='utf-8') as file:
-    #    file.write(str(soup))
-
-    #selecting js-store class
-    selected_div = soup.find('div', {'class': 'js-store'})
-
-    #searching for text
-    section = regex(str(selected_div.prettify()), "\\\\r", "&quot;,")
-
-    #cleaning messy text from special chars
-    cleanText = rem(section, replace)
-
-    log_append("Removing useless stuff...")
-
-    #writing text body in the file
-    filename = f"./songs/{name}.txt"
-    os.makedirs(os.path.dirname(filename), exist_ok=True)
-    with open(filename, 'w', encoding='utf-8') as file:
-        file.write(str(cleanText))
-
-    log_append("Done!")
-    log_append("File name: "+ name)
-    log_append("you can find it in: " + filename + "\n")
-    log_append("-----------------------------")
-
-def execute():
-    extract(entry.get())
+   
 
 
 
@@ -213,13 +138,7 @@ When people run in circles, it's a very, very[/tab]
 '''
 
 output = process_song(input_text)
-print(output)
 
 
-#---------------
-#    MAIN
-#---------------
-
-#making GUI
-
-
+if __name__ == "__main__":
+    main()
