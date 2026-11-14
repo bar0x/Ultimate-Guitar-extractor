@@ -1,9 +1,13 @@
+#top folders and debug
 .venv
 venv
+logs
 build
 songs
-
-#compilation chordbook output
-.tex
-.pdf
 __pycache__
+
+#compiled output and other things
+*.pdf
+
+#older chordbookmaker engine (legacy)
+inc/chordbookmaker/
