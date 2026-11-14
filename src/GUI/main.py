@@ -6,16 +6,7 @@ import os
 import customtkinter as ctk
 
 #dictionary for char replacement
-replace = {
-    "\\n":"",
-    "\\r":"\n",
-    "[ch]":"",
-    "[/ch]":"",
-    "[tab]":"",
-    "[/tab]":"",
-    "\\&quot;":"",
-    "'":"'"
-}
+
 
 
 
@@ -23,17 +14,6 @@ replace = {
 #    FUNCT
 #---------------
 
-def rem(testo, sostituzioni):
-    righe = testo.splitlines()
-    
-    righe_modificate = []
-    for riga in righe:
-        for chiave, valore in sostituzioni.items():
-            riga = riga.replace(chiave, valore)
-        righe_modificate.append(riga)
-    
-    # Riassembliamo il testo con le righe modificate
-    return '\n'.join(righe_modificate)
 
 def regex(testo, regex_iniziale, regex_finale):
     # Cerca la parte del testo che si trova tra le due regex
