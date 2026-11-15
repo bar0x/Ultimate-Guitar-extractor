@@ -5,6 +5,9 @@ __pycache__/
 
 #Project output and log
 dist/
+build/
+*.exe
+*.spec
 logs/
 songs/
 output/
@@ -17,6 +20,8 @@ output/
 *.fls
 *.fdb_latexmk
 *.synctex.gz
+*.mx1
+*.xdv
 
 #Other
 cover.pdf
