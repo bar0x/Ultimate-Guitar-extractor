@@ -6,7 +6,7 @@ logging.basicConfig(
         format="%(asctime)s - [%(name)s] - %(levelname)s - %(message)s",
         handlers=[
             logging.StreamHandler(),               # Logging on console
-            logging.FileHandler("logs/applicazione.log") # Loggin on file, uncomment if needed for debug 
+            logging.FileHandler("logs/latest.log") # Loggin on file, uncomment if needed for debug 
         ]
     )
 logger = logging.getLogger(__name__)
