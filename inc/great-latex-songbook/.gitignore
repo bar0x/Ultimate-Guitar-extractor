@@ -1,5 +1,0 @@
-#songbook compiled sources
-dist
-src/*.fdb_latexmk
-src/*.fls
-src/*.log

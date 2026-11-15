@@ -1,13 +1,22 @@
-#top folders and debug
-.venv
-venv
-logs
-build
-songs
-__pycache__
+#Python & uv
+__pycache__/
+*.py[cod]
+.venv/
 
-#compiled output and other things
-*.pdf
+#Project output and log
+dist/
+logs/
+songs/
+output/
 
-#older chordbookmaker engine (legacy)
-inc/chordbookmaker/
+#Temp and LaTeX log files
+*.log
+*.aux
+*.out
+*.toc
+*.fls
+*.fdb_latexmk
+*.synctex.gz
+
+#Other
+cover.pdf
