@@ -1,2 +1,1 @@
-from .scraper.dataScraper import dataScraper
-from .parser.dataParser import dataParser
+from .core import dataParser, dataScraper, setup_logging
